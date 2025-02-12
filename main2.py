@@ -9,6 +9,19 @@ import base64
 import os
 from dotenv import load_dotenv
 
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 load_dotenv()
 API_KEY = os.getenv("GOOGLE_API_KEY")
 
@@ -119,10 +132,15 @@ async def gemini_session_handler(client_websocket: websockets.WebSocketServerPro
 
 
 async def main() -> None:
-    async with websockets.serve(gemini_session_handler, "localhost", 9080):
-        print("Running websocket server localhost:9080...")
+    # async with websockets.serve(gemini_session_handler, "localhost", 9080):
+    async with websockets.serve(gemini_session_handler, "0.0.0.0", 9080):
+        print("Running websocket server on 0.0.0.0:9080...")
         await asyncio.Future()  # Keep the server running indefinitely
 
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(main())
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=10000)
