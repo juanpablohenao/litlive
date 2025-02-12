@@ -133,9 +133,10 @@ async def gemini_session_handler(client_websocket: websockets.WebSocketServerPro
 
 async def main() -> None:
     # async with websockets.serve(gemini_session_handler, "localhost", 9080):
-    async with websockets.serve(gemini_session_handler, "0.0.0.0", 10000):
-        print("Running websocket server on 0.0.0.0:10000...")
-        await asyncio.Future()  # Keep the server running indefinitely
+    port = int(os.environ.get("PORT", 10000))
+    async with websockets.serve(gemini_session_handler, "0.0.0.0", port):
+        print(f"Running websocket server on 0.0.0.0:{port}...")
+        await asyncio.Future()  # Keep the server runnin<g indefinitely
 
 @app.on_event("startup")
 async def startup_event():
@@ -143,4 +144,5 @@ async def startup_event():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=10000)
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
