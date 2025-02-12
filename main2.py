@@ -137,7 +137,7 @@ async def main() -> None:
     # async with websockets.serve(gemini_session_handler, "localhost", 9080):
     # port = int(os.environ.get("PORT", 8000))
     # port = os.getenv("PORT", 8000)
-    port = 8000
+    port = 10000
     print("portttt:", port)
     async with websockets.serve(gemini_session_handler, "0.0.0.0", port):
         print(f"Running websocket server on 0.0.0.0:{port}...")
@@ -151,6 +151,6 @@ if __name__ == "__main__":
     import uvicorn
     # port = int(os.environ.get("PORT", 8000))
     # port = os.getenv("PORT", 8000)
-    port = 8000
+    port = 10000
     print("portttttt:", port)
     uvicorn.run(app, host="0.0.0.0", port=port)
