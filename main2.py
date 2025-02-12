@@ -36,6 +36,7 @@ client = genai.Client(
   }
 )
 
+# async def gemini_session_handler(client_websocket: websockets.WebSocketServerProtocol):
 async def gemini_session_handler(client_websocket: websockets.WebSocketServerProtocol):
     """Handles the interaction with Gemini API within a websocket session.
 
@@ -134,9 +135,9 @@ async def gemini_session_handler(client_websocket: websockets.WebSocketServerPro
 
 async def main() -> None:
     # async with websockets.serve(gemini_session_handler, "localhost", 9080):
-    # port = int(os.environ.get("PORT", 10000))
-    port = os.getenv("PORT", 10000)
-    print("portT:", port)
+    port = int(os.environ.get("PORT", 8000))
+    # port = os.getenv("PORT", 8000)
+    print("portt:", port)
     async with websockets.serve(gemini_session_handler, "0.0.0.0", port):
         print(f"Running websocket server on 0.0.0.0:{port}...")
         await asyncio.Future()  # Keep the server runnin<g indefinitely
@@ -147,7 +148,7 @@ async def startup_event():
 
 if __name__ == "__main__":
     import uvicorn
-    # port = int(os.environ.get("PORT", 10000))
-    port = os.getenv("PORT", 10000)
-    print("portTT:", port)
+    port = int(os.environ.get("PORT", 8000))
+    # port = os.getenv("PORT", 8000)
+    print("porttt:", port)
     uvicorn.run(app, host="0.0.0.0", port=port)
