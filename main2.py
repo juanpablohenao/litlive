@@ -9,7 +9,7 @@ import base64
 import os
 from dotenv import load_dotenv
 
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
@@ -138,7 +138,7 @@ async def main() -> None:
     # port = int(os.environ.get("PORT", 8000))
     # port = os.getenv("PORT", 8000)
     port = 10000
-    print("portttt:", port)
+    print("prtttt:", port)
     async with websockets.serve(gemini_session_handler, "0.0.0.0", port):
         print(f"Running websocket server on 0.0.0.0:{port}...")
         await asyncio.Future()  # Keep the server runnin<g indefinitely
@@ -147,10 +147,14 @@ async def main() -> None:
 async def startup_event():
     asyncio.create_task(main())
 
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await gemini_session_handler(websocket)
+
 if __name__ == "__main__":
     import uvicorn
     # port = int(os.environ.get("PORT", 8000))
     # port = os.getenv("PORT", 8000)
     port = 10000
-    print("portttttt:", port)
+    print("prtttttt:", port)
     uvicorn.run(app, host="0.0.0.0", port=port)
