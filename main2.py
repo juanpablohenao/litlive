@@ -149,7 +149,17 @@ async def startup_event():
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    await gemini_session_handler(websocket)
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_text()
+            # Handle the received data
+            await websocket.send_text(f"Message received: {data}")
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        await websocket.close()
+
 
 if __name__ == "__main__":
     import uvicorn
